@@ -7,17 +7,17 @@ def calculate_question_type(apps, schema_editor):
     Choice = apps.get_model('polls', 'Choice')
 
     for question in Question.objects.all():
-        # Отримуємо всі відповіді для цього питання, відсортовані за кількістю голосів (від найбільшого)
+
         choices = Choice.objects.filter(question=question).order_by('-votes')
         
-        # Беремо голоси двох найпопулярніших відповідей
+
         top_votes = [c.votes for c in choices[:2]]
 
-        # Умова а): два і більше варіантів, і у двох лідерів votes >= 10 
+ 
         if len(top_votes) >= 2 and top_votes[0] >= 10 and top_votes[1] >= 10:
             question.question_type = 'Controversial'
             question.save()
-        # Умова б): якщо перша не спрацювала, але хоча б одна відповідь має votes >= 10 
+   
         elif len(top_votes) >= 1 and top_votes[0] >= 10:
             question.question_type = 'Popular'
             question.save()
@@ -25,9 +25,9 @@ def calculate_question_type(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polls', '0005_question_question_type'), # Переконайся, що тут правильна попередня міграція
+        ('polls', '0005_question_question_type'), #
     ]
 
     operations = [
-        migrations.RunPython(calculate_question_type),
+        migrations.RunPython(calculate_question_type, reverse_code=migrations.RunPython.noop),
     ]

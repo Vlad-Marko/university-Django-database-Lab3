@@ -15,5 +15,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(set_popular_choices),
+        migrations.RunPython(set_popular_choices, reverse_code=migrations.RunPython.noop),
     ]
